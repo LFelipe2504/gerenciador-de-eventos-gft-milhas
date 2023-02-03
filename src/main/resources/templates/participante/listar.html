@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymelife/layout"
+	layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+<div layout:fragment="content">
+<div class="alert alert-primary" th:if="${#lists.isEmpty(lista)}">
+	Nenhum participante do evento encontrado
+</div> 
+<div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}"></div>
+<div class="card mb-3">
+<div class="card-header">
+<p class="text-primary">Filtrar participante</p>
+</div>
+<div class="card-body">
+	<form method="GET">
+		<div class="form-group mb-3">
+			<label for="nome">Nome:</label>
+			 <input class="form-control"  type="text" name="nome" />
+		</div>
+		<button type="submit" class="btn btn-primary">Pesquisar Participante</button>
+	</form>
+</div>
+<div th:if="${not #lists.isEmpty(lista)}">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nome</th>
+				<th>Quatro Letras</th>
+				<th>Nível</th>
+				<th>Email</th>
+				<th>Grupo</th>
+				<th>Opções</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="participante: ${lista}">
+				<td th:text="${participante.id}"></td>
+				<td th:text="${participante.nome}"></td>
+				<td th:text="${participante.quatroLetras}"></td>
+				<td th:text="${participante.nivel}"></td>
+				<td th:text="${participante.email}"></td>
+				<td th:text="${participante?.grupo?.nome}"></td>
+				<td><a class="btn btn-primary btn-sm" th:href="@{/participante/editar(id=${participante.id})}">Editar</a>
+				<a class="btn btn-primary btn-sm" th:href="@{/participante/excluir(id=${participante.id})}" onclick="return confirm('Você realmente deseja excluir esse participante?')">Excluir</a>
+				</td>				
+			</tr>
+		</tbody>
+	</table>
+</div>
+</div>
+</div>
+</html>

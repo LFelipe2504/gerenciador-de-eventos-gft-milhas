@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymelife/layout"
+	layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+<div layout:fragment="content">
+<div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}">
+</div>
+<div class="card">
+<div class="card-header">
+<p class="text-primary">Novo Participante do Evento</p>
+</div>
+<div class="card-body">
+	<form method="post" th:object="${participante}" th:action="@{/participante/editar}">	
+		<input type="hidden" th:field="*{id}">
+		<div class="form-group mb-3">
+			<label for="nome">Nome:</label>
+			 <input class="form-control"  type="text" th:field="*{nome}" required>
+			 <div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+		</div>
+		<div class="form-group mb-3">
+			<label for="quatroLetras">Quatro Letras:</label>
+			 <input class="form-control"  type="text" th:field="*{quatroLetras}" maxlength="4"  required>
+			 <div class="text-danger" th:if="${#fields.hasErrors('quatroLetras')}" th:errors="*{quatroLetras}"></div>
+		</div>
+		<div class="form-group mb-3">
+			<label for="nome">Email:</label>
+			 <input class="form-control"  type="email" th:field="*{email}" required>
+			 <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+		</div>		
+		<div class="form-group mb-3">
+			<label for="nome">Nível:</label>
+			 <input class="form-control"type="text" th:field="*{nivel}" required>
+			 <div class="text-danger" th:if="${#fields.hasErrors('nivel')}" th:errors="*{nivel}"></div>
+		</div>
+		<div class="form-group mb-3">
+			<label for="nome">Grupo:</label>
+				<select class="form-select" th:field="*{grupo}">
+					<option th:type="checkbox" th:each="grupo:${listaGrupos}" th:value="${grupo.id}" th:text="${grupo.nome}" />
+				</select>
+			 <div class="text-danger" th:if="${#fields.hasErrors('grupo')}" th:errors="*{grupo}"></div>
+		</div>		
+		<button type="submit" class="btn btn-primary">Salvar Participante</button>
+	</form>
+</div>
+</div>
+</div>
+
+</html>

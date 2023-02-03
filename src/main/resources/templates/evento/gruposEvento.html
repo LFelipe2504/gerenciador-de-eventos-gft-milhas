@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymelife/layout"
+	layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+<div layout:fragment="content">
+<div class="alert alert-primary" th:if="${#lists.isEmpty(lista)}">
+	Nenhum grupo cadastrado no evento
+</div> 
+<h3>
+	<div class="card-header">
+		<p class="text-primary" th:text="${evento.getNome()}"></p>
+	</div>
+</h3>
+
+<div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}"></div>
+
+<form method="POST" th:object="${grupo}" th:action="@{/evento/grupos}">
+
+	
+	Nome:
+		<input class="form-group mb-3" type="text" th:field="*{nome}" required/>
+		<div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>	
+			
+	Evento:
+		<select class="form-group mb-3" th:field="*{evento}" >
+			<option th:type="checkbox" th:value="${evento.id}" th:text="${evento.nome}" />
+		</select>
+		<div class="text-danger" th:if="${#fields.hasErrors('evento')}" th:errors="*{evento}"></div>	
+	
+<div class="card-body">
+	<button type="submit" class="btn btn-primary" >Adicionar Grupo</button>
+</div>
+</form>
+<div th:if="${not #lists.isEmpty(lista)}">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nome</th>
+				<th>Quantidade de Participantes</th>
+				<th>Opções</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="grupo: ${lista}">
+				<td th:text="${grupo.id}"></td>
+				<td th:text="${grupo.nome}"></td>
+				<td th:text="${grupo.listaParticipantes.size()}"></td>
+				<td>
+				<a class="btn btn-primary btn-sm" th:href="@{/grupo/editar(id=${grupo.id})}" >Editar</a>
+				</td>
+				
+			</tr>
+		</tbody>
+	</table>
+</div>
+</div>
+
+</html>

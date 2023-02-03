@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymelife/layout"
+	layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+<div layout:fragment="content">
+<div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}">
+</div>
+<div class="alert alert-primary" th:if="${#lists.isEmpty(lista)}">
+	Nenhuma atividade cadastrada no evento
+</div> 
+<h3>
+	<div class="card-header">
+		<p class="text-primary" th:text="${evento.getNome()}"></p>
+	</div>
+</h3>
+
+
+<form method="POST" th:object="${atividade}" th:action="@{/evento/atividades}">
+
+	
+	Nome:
+		<input class="form-group mb-3" type="text" th:field="*{nome}" required/>
+		<div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>	
+		
+	Data de Início:	
+		<input class="form-group mb-3" type="date" th:field="*{dataInicio}" required>
+		<div class="text-danger" th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
+		
+	Data de Entrega:	
+		<input class="form-group mb-3" type="date" th:field="*{dataEntrega}" required>
+		<div class="text-danger" th:if="${#fields.hasErrors('dataEntrega')}" th:errors="*{dataEntrega}"></div>
+			 			
+	Evento:
+		<select class="form-group mb-3" th:field="*{evento}" >
+			<option th:type="checkbox" th:value="${evento.id}" th:text="${evento.nome}" />
+		</select>
+		<div class="text-danger" th:if="${#fields.hasErrors('evento')}" th:errors="*{evento}"></div>	
+	
+<div class="card-body">
+	<button type="submit" class="btn btn-primary" >Adicionar Atividade</button>
+</div>
+</form>
+<div th:if="${not #lists.isEmpty(lista)}">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nome</th>
+				<th>Data de Início</th>
+				<th>Data de Entrega</th>
+				<th>Opções</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="atividade: ${lista}">
+				<td th:text="${atividade.id}"></td>
+				<td th:text="${atividade.nome}"></td>
+				<td th:text="${#dates.format(atividade.dataInicio, 'dd/MM/yyyy')}"></td>
+				<td th:text="${#dates.format(atividade.dataEntrega, 'dd/MM/yyyy')}"></td>
+				<td>
+				<a class="btn btn-primary btn-sm" th:href="@{/atividade/editar(id=${atividade.id})}" >Editar</a>
+				</td>
+				
+			</tr>
+		</tbody>
+	</table>
+</div>
+</div>
+
+</html>

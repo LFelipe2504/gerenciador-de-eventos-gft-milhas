@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymelife/layout"
+	layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+<div layout:fragment="content">
+<div class="alert alert-primary" th:if="${#lists.isEmpty(lista)}">
+	Nenhum participante cadastrado no grupo
+</div> 
+<h3>
+	<div class="card-header">
+		<p class="text-primary" th:text="${grupo.getNome()}"></p>
+	</div>
+</h3>
+
+<div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}"></div>
+
+<form method="POST" th:object="${participante}" th:action="@{/grupo/participantes}">
+	
+	Nome:
+		<input class="form-group mb-3" type="text" th:field="*{nome}" required/>
+		<div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+	Quatro Letras:
+		<input class="form-group mb-3"  type="text" th:field="*{quatroLetras}" maxlength="4"  required>
+		 <div class="text-danger" th:if="${#fields.hasErrors('quatroLetras')}" th:errors="*{quatroLetras}"></div>	
+	Email:
+		<input class="form-group mb-3"  type="email" th:field="*{email}" required>
+		<div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>	
+	Nível:
+		<input class="form-group mb-3"type="text" th:field="*{nivel}" required>
+		<div class="text-danger" th:if="${#fields.hasErrors('nivel')}" th:errors="*{nivel}"></div><br>
+			
+	Grupo:
+		<select class="form-group mb-3" th:field="*{grupo}" >
+			<option th:type="checkbox" th:value="${grupo.id}" th:text="${grupo.nome}" />
+		</select>
+		<div class="text-danger" th:if="${#fields.hasErrors('grupo')}" th:errors="*{grupo}"></div>
+	
+<div class="card-body">
+	<button type="submit" class="btn btn-primary" >Adicionar Participante</button>
+</div>
+</form>
+<div th:if="${not #lists.isEmpty(lista)}">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nome</th>
+				<th>Quatro Letras</th>
+				<th>Nível</th>
+				<th>Email</th>
+				<th>Opções</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="participante: ${lista}">
+				<td th:text="${participante.id}"></td>
+				<td th:text="${participante.nome}"></td>
+				<td th:text="${participante.quatroLetras}"></td>
+				<td th:text="${participante.nivel}"></td>
+				<td th:text="${participante.email}"></td>
+				<td>
+				<a class="btn btn-primary btn-sm" th:href="@{/participante/editar(id=${participante.id})}" >Editar</a>
+				</td>
+				
+			</tr>
+		</tbody>
+	</table>
+</div>
+</div>
+
+</html>
